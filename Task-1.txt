@@ -1,0 +1,92 @@
+
+
+ Create the Library database
+CREATE DATABASE LibraryDB;
+USE LibraryDB;
+
+-- Authors Table
+CREATE TABLE Authors (
+    AuthorID INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(100) NOT NULL,
+    Bio TEXT
+);
+
+-- Categories Table
+CREATE TABLE Categories (
+    CategoryID INT AUTO_INCREMENT PRIMARY KEY,
+    CategoryName VARCHAR(50) NOT NULL UNIQUE
+);
+
+-- Books Table
+CREATE TABLE Books (
+    BookID INT AUTO_INCREMENT PRIMARY KEY,
+    Title VARCHAR(150) NOT NULL,
+    AuthorID INT,
+    CategoryID INT,
+    ISBN VARCHAR(20) UNIQUE,
+    PublishedYear INT,
+    CONSTRAINT fk_author FOREIGN KEY (AuthorID) REFERENCES Authors(AuthorID),
+    CONSTRAINT fk_category FOREIGN KEY (CategoryID) REFERENCES Categories(CategoryID)
+);
+
+-- Members Table
+CREATE TABLE Members (
+    MemberID INT AUTO_INCREMENT PRIMARY KEY,
+    FullName VARCHAR(100) NOT NULL,
+    Email VARCHAR(100) UNIQUE NOT NULL,
+    JoinDate DATE DEFAULT CURRENT_DATE
+);
+
+-- Loans Table
+CREATE TABLE Loans (
+    LoanID INT AUTO_INCREMENT PRIMARY KEY,
+    BookID INT,
+    MemberID INT,
+    LoanDate DATE DEFAULT CURRENT_DATE,
+    ReturnDate DATE,
+    CONSTRAINT fk_book FOREIGN KEY (BookID) REFERENCES Books(BookID),
+    CONSTRAINT fk_member FOREIGN KEY (MemberID) REFERENCES Members(MemberID)
+);
+
+
+
+
+Interview Questions:
+
+
+
+1.What is normalization?
+Ans:: Reducing data redundancy and improving data integrity by organizing data into separate tables and connecting them through relationships .
+
+2.Explain primary vs foreign key?
+Ans::   . Primary key: Uniquely identifies each record in a table.
+
+        . Foreign key: References a primary key in another table, creating a relationship between tables.
+
+3.What are constraints?
+Ans:: Rules applied to data columns to ensure data validity (for example, NOT NULL, UNIQUE, PRIMARY KEY, FOREIGN KEY).
+
+4.What is a surrogate key?
+Ans:: An artificial or system-generated key (such as an auto-incrementing ID) that is used as a unique identifier instead of natural keys.
+
+5.How do you avoid data redundancy?
+Ans:: Use normalization, separate data into logical tables, and use foreign keys to link them.
+
+6.What is ER diagram?
+Ans:: A visual representation of the entities and their relationships in a database.
+
+7.What are the types of relationships in DBMS?
+Ans:: . One-to-One
+
+      . One-to-Many
+
+      . Many-to-Many
+
+8.Explain the purpose of AUTO_INCREMENT?
+Ans:: Automatically generate a unique value for each new record in the primary key field.
+
+9.What is the default storage engine in MySQL?
+Ans:: InnoDB
+
+10.What is a composite key?
+Ans:: A combination of two or more columns that is used to uniquely identify a record when none of the columns is unique.
