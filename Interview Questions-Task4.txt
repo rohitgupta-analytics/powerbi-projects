@@ -1,0 +1,121 @@
+Interview Questions:
+
+1) What is GROUP BY?
+Ans::The GROUP BY clause is used to arrange identical data into groups based on one or more columns, so that aggregate functions (SUM, AVG, COUNT, MAX, MIN) can be applied to each group.
+Example:
+SELECT department, COUNT(*) AS emp_count
+FROM employees
+GROUP BY department;
+
+2) Difference between WHERE and HAVING?
+Ans::  . WHERE filters rows before grouping (cannot use aggregate functions).
+
+       .HAVING filters groups after aggregation (can use aggregate conditions).
+       Example:
+-- WHERE filters rows first
+SELECT department, AVG(salary) AS avg_sal
+FROM employees
+WHERE salary > 30000
+GROUP BY department;
+
+-- HAVING filters aggregated results
+SELECT department, AVG(salary) AS avg_sal
+FROM employees
+GROUP BY department
+HAVING AVG(salary) > 50000;
+
+3.How does COUNT(*) differ from COUNT(column)?
+Ans::  . COUNT(*) counts all rows, including those with NULL values.
+
+       . COUNT(column) counts only non-NULL values in that column.
+Example:
+
+SELECT COUNT(*) AS total_rows, COUNT(job_title) AS non_null_titles
+FROM employees;
+
+
+
+4.Can you group by multiple columns?
+Ans:: Yes. You can group by more than one column, creating groups based on their combined values.
+Example:
+ SELECT department, job_title, COUNT(*) AS cnt
+FROM employees
+GROUP BY department, job_title;
+
+
+5.What is ROUND() used for?
+Ans::  The ROUND() function rounds a numeric value to a specified number of decimal places.
+Example:  SELECT department, ROUND(AVG(salary), 2) AS avg_salary
+FROM employees
+GROUP BY department;
+
+
+6.How do you find the highest salary by department?
+Ans::  Use MAX() with GROUP BY department.
+Example:
+SELECT department, MAX(salary) AS highest_salary
+FROM employees
+GROUP BY department;
+
+To get full details of the employee(s) with the highest salary in each department:
+
+SELECT e.*
+FROM employees e
+JOIN (
+  SELECT department, MAX(salary) AS max_sal
+  FROM employees
+  GROUP BY department
+) m ON e.department = m.department AND e.salary = m.max_sal;
+
+
+
+7.What is the default behavior of GROUP BY?
+Ans:: It groups rows based on the unique values of the specified column(s) and then applies the aggregate functions to each group. All columns in the SELECT statement that are not aggregated must be listed in the GROUP BY clause.
+Example:
+SELECT department, COUNT(*) AS cnt
+FROM employees
+GROUP BY department;
+
+8.Explain AVG and SUM?
+Ans::    . SUM(column) returns the total sum of a numeric column.
+
+         . AVG(column) returns the average value of a numeric column (sum divided by        count of non-null values).
+Example:
+
+SELECT department,
+       SUM(salary) AS total_salary,
+       AVG(salary) AS avg_salary
+FROM employees
+GROUP BY department;
+
+
+9.How to count distinct values?
+Ans::  Use COUNT(DISTINCT column) to count unique values in a column.
+Example:
+SELECT COUNT(DISTINCT job_title) AS unique_job_titles
+FROM employees;
+
+Grouped distinct count:
+
+SELECT department, COUNT(DISTINCT job_title) AS unique_titles
+FROM employees
+GROUP BY department;
+
+
+
+10.What is an aggregate function?
+Ans::   An aggregate function operates on a set of values and returns a single summarized result for each group. Common examples are: SUM(), AVG(), COUNT(), MAX(), MIN().
+Example:
+SELECT COUNT(*) AS total_employees,
+       SUM(salary) AS total_payroll,
+       AVG(salary) AS avg_salary,
+       MAX(salary) AS max_salary,
+       MIN(salary) AS min_salary
+FROM employees;
+
+
+
+
+
+
+
