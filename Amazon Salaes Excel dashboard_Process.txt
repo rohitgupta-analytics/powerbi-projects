@@ -1,0 +1,202 @@
+                    Amazon Salaes Excel dashboard Project-
+                
+1) File + Prep::
+
+Open Sales Data.xlsx.
+
+Click inside data → press Ctrl + A → Ctrl + T (Create Table).
+
+Checkbox “My table has headers” tick karo → OK.
+
+Table ko name do: Table Design tab → Table Name = SalesTable.
+
+Ensure data types:
+
+Date = Date, Units = Number (whole), Price = Number, Total Sales = Number/currency.
+
+Select Total Sales column → Home → Number Format → More Number Formats → Currency → Symbol: ₹ (if not available choose the closest or use Custom: ₹#,##0.00).
+
+Remove blanks / bad rows: Data → Filter (already table has filters) → check for blanks and delete those rows.
+
+2) Create a Dashboard sheet
+
+Add new sheet: + → rename to Dashboard.
+
+Reserve top area for title:
+
+A1: Amazon Sales Dashboard 2024 → big bold font (e.g., 20 pt).
+
+Merge A1:F1 if you like (Home → Merge & Center).
+
+3) KPI cards (Total Sales, Total Units, # Cities)
+
+Use table formulas so KPIs update with data.
+
+In Dashboard, pick cells:
+
+A3: Total Sales (₹)
+
+B3: formula:
+
+=SUM(Table1[Total Sales])
+
+
+(If your table name is SalesTable, use =SUM(SalesTable[Total Sales]))
+
+A4: Total Units Sold
+
+B4: =SUM(SalesTable[Units])
+
+A5: Number of Cities
+
+B5: =COUNTA(UNIQUE(SalesTable[City]))
+
+If Excel version doesn’t have UNIQUE, use Pivot or:
+=SUMPRODUCT(1/COUNTIF(SalesTable[City],SalesTable[City])) (array-style; simpler: create pivot to count unique).
+
+Formatting:
+
+B3: Format as Currency (₹).
+
+Make these boxes look like cards: Fill color, border, increase font size. (Home → Fill Color, Font size bold).
+
+4) Prepare summary tables (use PivotTables)
+
+Instead of manual formulas, PivotTables make charts dynamic and work well with Slicers.
+
+Create these PivotTables (place each on its own sheet):
+
+A) Product-wise Units (for bar chart)
+
+Select any cell in SalesTable → Insert → PivotTable → New Worksheet → OK.
+
+Pivot fields: Product → Rows, Units → Values (Sum of Units).
+
+Sort descending: Right-click Sum of Units → Sort → Sort Largest to Smallest.
+
+Rename sheet Pivot_ProductUnits.
+
+B) City-wise Sales (for line chart)
+
+New PivotTable → City → Rows, Total Sales → Values (Sum).
+
+Rename Pivot_CitySales.
+
+C) State-wise Sales (for Map)
+
+New PivotTable → State → Rows, Total Sales → Values (Sum).
+
+Rename Pivot_StateSales.
+
+D) Region summary (for Doughnut / KPI %) — optional
+
+New PivotTable → Region → Rows, Total Sales → Values (Sum).
+
+Rename Pivot_RegionSales.
+
+5) Create Charts from PivotTables
+
+Place charts on the Dashboard sheet.
+
+A) Product-wise Units — Horizontal Bar (Top products)
+
+Go to Pivot_ProductUnits sheet → click inside pivot.
+
+PivotTable Analyze → PivotChart (or Insert → Bar Chart → Clustered Bar).
+
+Choose Bar Chart (horizontal), then cut/paste to Dashboard (Ctrl+X / Ctrl+V).
+
+Format: Axis labels on left, reverse order so largest at top: Chart → Format Axis → check “Categories in reverse order.”
+
+B) City-wise Sales — Line Chart
+
+From Pivot_CitySales, Insert → Line Chart.
+
+Copy chart to Dashboard, place under KPIs.
+
+If too many cities crowd X-axis, you can filter top N cities in Pivot or rotate labels (Format Axis → Text direction).
+
+C) State-wise Sales — Map Chart
+
+Go Pivot_StateSales, click pivot → Insert → Maps → Filled Map.
+
+If Excel supports map chart, it will render. Copy to Dashboard.
+
+Tip: If map shows errors, ensure state names are standard (e.g., “Maharashtra”, “Kerala”). If not, create a helper column to standardize names.
+
+D) Region Doughnut / KPI %
+
+From Pivot_RegionSales, insert Doughnut Chart to show share of sales by Region.
+
+Add data labels: right-click → Add Data Labels → Show percentage.
+
+6) Make charts interactive — add Slicers
+
+Click any PivotTable → PivotTable Analyze → Insert Slicer.
+
+Select fields: State, Product (and optionally Region). → OK.
+
+Slicers appear — move them on Dashboard left side.
+
+Connect slicers to multiple pivot tables:
+
+Click a Slicer → Slicer tab → Report Connections / PivotTable Connections → check all PivotTables (Pivot_ProductUnits, Pivot_CitySales, Pivot_StateSales, Pivot_RegionSales). → OK.
+Now slicer filters update all charts.
+
+7) Formatting & polish
+
+Chart colors: Chart → Chart Design → Change Colors (pick a cohesive palette).
+
+Card styling: Insert → Shapes → use rounded rectangles behind KPI cells for shadow look.
+
+Icons: Insert → Icons → search “sales, data” → add small icons beside KPI titles.
+
+Conditional Formatting: For a table of city sales, highlight top 3: Select values → Home → Conditional Formatting → Top/Bottom Rules → Top 10 Items → 3.
+
+8) Add interactivity tweaks
+
+Add a small table for targets if you want % complete (e.g., Sales Target ₹ 5,00,000).
+
+Create cell Target = 500000 and compute % Achieved = SUM(SalesTable[Total Sales]) / Target.
+
+Use Doughnut to show achieved vs remaining (2-value range).
+
+Add data labels & neat number formatting: right-click data label → Format Data Labels → show value & % where needed.
+
+9) Test functionality
+
+Use slicers: pick a State or Product and verify all charts and KPI values update.
+
+Change table data (add a test row) → go to Data → Refresh All to update PivotTables and charts.
+
+10) Save & Export
+
+Save workbook: File → Save As → Amazon_Sales_Dashboard_Project.xlsx.
+
+To share as PDF: File → Export → Create PDF/XPS or File → Save As → PDF. Choose Options → Select Entire workbook or Active sheet(s) as needed.
+
+Quick formulas (copy-paste)
+
+Total Sales: =SUM(SalesTable[Total Sales])
+
+Total Units: =SUM(SalesTable[Units])
+
+Unique cities (if Excel has UNIQUE): =COUNTA(UNIQUE(SalesTable[City]))
+
+% Achieved (if target in B1): =SUM(SalesTable[Total Sales]) / B1
+
+Troubleshooting & tips
+
+Map not showing properly → ensure State values are correctly spelled and standard. Small differences (extra spaces) break mapping — use TRIM() and check spelling.
+
+Pivot not updating → right-click Pivot → Refresh or Data → Refresh All.
+
+Too many categories crowd charts → filter top 10 in Pivot or use Top 10 filter: Row Labels dropdown → Value Filters → Top 10.
+
+If your Excel lacks Map chart → use a Choropleth substitute: create State pivot table and use conditional formatting on cells (Data Bars or Color Scale), or export to Power BI for maps.
+
+If you want, I can now:
+
+A. Generate the finished Excel file for you (I can build it and provide download), or
+
+B. Walk you through each chart live (tell me “start Product chart” and I’ll give the exact clicks for just that chart).
